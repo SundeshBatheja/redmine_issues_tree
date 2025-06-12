@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  redmine:
+    image: redmine:5.1
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      REDMINE_SECRET_KEY_BASE: 5ef17910d6db1526ca4a66f544d844ea4758b44a35bc17489a8591cb683fa73675ec7a440a924cb47bafaf9b69b931328d78b52ce7e35cada716d8c870a16e00
+      REDMINE_DB_POSTGRES: redmine_db
+      REDMINE_DB_DATABASE: redmine
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: secret
+    depends_on:
+      - redmine_db
+    volumes:
+      - ./plugins:/usr/src/redmine/plugins
+
+  redmine_db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: redmine
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  redmine_data:
+  postgres_data:
+
+
+
